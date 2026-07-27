@@ -1,0 +1,31 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+.env
+
+# --- Jupyter Notebooks ---
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+# --- PySR specific ---
+hall_of_fame.csv
+hall_of_fame.csv.bkup
+pysr_results.json
+pysr_options.jl
+*.jl
+
+# --- Large Research Data ---
+*.csv
+*.mat
+*.pkl
+
+# --- VS Code ---
+.vscode/
+
+# --- OS specific ---
+.DS_Store
+Thumbs.db
