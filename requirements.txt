@@ -1,4 +1,5 @@
 pandas
 numpy
 matplotlib
-PySRscikit-learn
+pysr
+scikit-learn
