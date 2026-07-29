@@ -29,3 +29,7 @@ pysr_options.jl
 # --- OS specific ---
 .DS_Store
 Thumbs.db
+
+# --- Directory---
+models/
+src/outputs/

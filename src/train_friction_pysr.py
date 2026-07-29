@@ -2,13 +2,15 @@ import pandas as pd
 import numpy as np
 from pysr import PySRRegressor
 import os
+import pickle
 
 # --- MODEL NAMING ---
-version = "v1"
-model_id = "26-07-27-withz-" + version
+version = "v2"
+explanation = "second-running-with-the-same-conditin-as-v1-just-refined-model-naming"
+model_id = "26-07-29_withz_" + version + "_" + explanation
 
 # --- SETUP PATHS ---
-DATA_PATH = os.path.join("..", "datasets", "datasets/datasets-withz/26-07-22_script-generatepysrdatawithz_refine-to-have-35-35-30-ratio_ode23tbf_maxstepsize-1en4_relativetolerance-1en7_absolutetolerance-1en10.csv")
+DATA_PATH = os.path.join("..", "datasets", "datasets-withz/26-07-22_script-generatepysrdatawithz_refine-to-have-35-35-30-ratio_ode23tbf_maxstepsize-1en4_relativetolerance-1en7_absolutetolerance-1en10.csv")
 MODEL_DIR = "../models/"
 CONFIG_DIR = "../models/configs/"
 os.makedirs(MODEL_DIR, exist_ok=True)
@@ -78,7 +80,8 @@ def main():
     print(model.get_best())
 
     # Save the model
-    model.export_pickle(os.path.join(MODEL_DIR, f"{model_id}.pkl"))
+    with open(os.path.join(MODEL_DIR, f"{model_id}.pkl"), "wb") as f:
+        pickle.dump(model, f)
 
     # Save the configuration details
     save_model_config(model, model_id)
