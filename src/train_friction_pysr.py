@@ -5,8 +5,8 @@ import os
 import pickle
 
 # --- MODEL NAMING ---
-version = "v2"
-explanation = "second-running-with-the-same-conditin-as-v1-just-refined-model-naming"
+version = "v5"
+explanation = "normalize-v-by-1e5-as-others-to-capture-the-starting-moment"
 model_id = "26-07-29_withz_" + version + "_" + explanation
 
 # --- SETUP PATHS ---
@@ -33,15 +33,19 @@ def main():
     # --- DATA LOADING & CLEANING
     print(f"Loading data from : {DATA_PATH}...")
     try:
+        # Load the data
         df = pd.read_csv(DATA_PATH)
+
+        # Apply the discovery scale to velocity
+        df['v_norm'] = df['v'] * 1e5
     except FileNotFoundError:
         print("Error: CV file not found. Check your DATA_PATH.")
         return
 
     # We exclude 'Source' so that AI finds a universal law.
     # We use .values to provide raw numpy arrays to the Julia engine.
-    X = df[['v', 'z_norm', 'dzdt_norm']].values
-    y = df['F'].values
+    X = df[['v_norm', 'z_norm']].values
+    y = df['dzdt_norm'].values
 
     print(f"Dataset loaded. Size: {X.shape[0]} rows.")
     print(f"Features: v, z_norm, dzdt_norm | Target: F")
