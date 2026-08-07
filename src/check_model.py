@@ -3,7 +3,7 @@ import os
 from pysr import PySRRegressor
 
 # Target model name
-model_name = "26-08-07_withz_v6_dzdt_try-the-ratio-35-50-15-to-get-a-term-of-stribeck-effect.pkl"
+model_name = "26-08-07_withz_v8_dzdt_try-more-massive-maxsize-from-20-to-30-to-get-a-term-of-stribeck-effect-without-overfitting.pkl"
 
 # PATH for a model
 model_path = "../models/" + model_name
