@@ -3,7 +3,7 @@ import os
 from pysr import PySRRegressor
 
 # Target model name
-model_name = "26-07-29_withz_v4_changed-target-to-dzdt-from-F.pkl"
+model_name = "26-08-07_withz_v6_dzdt_try-the-ratio-35-50-15-to-get-a-term-of-stribeck-effect.pkl"
 
 # PATH for a model
 model_path = "../models/" + model_name
@@ -18,7 +18,7 @@ print(model)
 
 # Show the detail just for the best equation
 print("\n---The Best Equation---")
-print(model.get_best())
+print(model.get_best()['equation']) # remove the limitation of length with ['equation']
 
 # Show all equations within data frame method
 # print(model.equations_)

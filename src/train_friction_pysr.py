@@ -5,12 +5,14 @@ import os
 import pickle
 
 # --- MODEL NAMING ---
-version = "v5"
-explanation = "normalize-v-by-1e5-as-others-to-capture-the-starting-moment"
-model_id = "26-07-29_withz_" + version + "_" + explanation
+version = "v8"
+explanation = "try-more-massive-maxsize-from-20-to-30-to-get-a-term-of-stribeck-effect-without-overfitting"
+#target = "F"
+target = "dzdt"
+model_id = "26-08-07_withz_" + version + "_" + target + "_" + explanation
 
 # --- SETUP PATHS ---
-DATA_PATH = os.path.join("..", "datasets", "datasets-withz/26-07-22_script-generatepysrdatawithz_refine-to-have-35-35-30-ratio_ode23tbf_maxstepsize-1en4_relativetolerance-1en7_absolutetolerance-1en10.csv")
+DATA_PATH = os.path.join("..", "datasets", "datasets-withz/26-08-07_script-generatepysrdatawithz_refine-to-have-35-50-15-ratio_ode23tbf_maxstepsize-1en4_relativetolerance-1en7_absolutetolerance-1en10.csv")
 MODEL_DIR = "../models/"
 CONFIG_DIR = "../models/configs/"
 os.makedirs(MODEL_DIR, exist_ok=True)
@@ -44,24 +46,28 @@ def main():
 
     # We exclude 'Source' so that AI finds a universal law.
     # We use .values to provide raw numpy arrays to the Julia engine.
+    #X = df[['v_norm', 'z_norm', 'dzdt_norm']].values
+    #y = df['F'].values
     X = df[['v_norm', 'z_norm']].values
     y = df['dzdt_norm'].values
 
     print(f"Dataset loaded. Size: {X.shape[0]} rows.")
-    print(f"Features: v, z_norm, dzdt_norm | Target: F")
+    #print(f"Features: v, z_norm, dzdt_norm | Target: F")
+    print(f"Features: v_norm, z_norm | Target: dzdt_norm")
 
     # --- PYSR REGRESSION CONFIGURATION
     model = PySRRegressor(
-        niterations=20,         # Low number for the first test run
+        niterations=1000,         # Low number for the first test run
         binary_operators=["+", "-", "*", "/"],
         unary_operators=[
-            "exp",              # Essential for Stribeck Effect
+            #"exp",              # Essential for Stribeck Effect
             "abs",              # Essential for Symmetry/Direction
             "square",           # Helps with the (v/vs)^2 term
         ],
         # We penalize complex equations to keep them lightweight.
-        maxsize=20,             # Max 20 tokes in the formula
-        complexity_of_operators={"exp": 3, "abs": 2},   # Make exp more expensive
+        maxsize=30,             # Max tokens in the formula (admittable complexity)
+        #complexity_of_operators={"exp": 3, "abs": 2},   # Make exp more expensive
+        complexity_of_operators={"abs": 2},   # Exclude exp
 
         model_selection="best", # Automatically pick the best accuracy/complexity balance
         batching=True,          # Required for 200 000 rows to avoid RAM lag
